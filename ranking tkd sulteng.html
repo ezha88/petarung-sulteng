@@ -1,0 +1,98 @@
+<!-- Tambahan dalam content-wrapper --><div class="content-wrapper">
+  <section class="content">
+    <div class="container-fluid pt-4">
+      <h4 class="mb-3">Peringkat Atlet</h4>
+      <table class="table table-bordered" id="rankingTable">
+        <thead>
+          <tr>
+            <th>Nama</th>
+            <th>Divisi</th>
+            <th>Klasifikasi</th>
+            <th>Kelas</th>
+            <th>Poin</th>
+          </tr>
+        </thead>
+        <tbody id="rankingBody"></tbody>
+      </table><hr class="my-4">
+
+  <h4>Input Event dan Medali</h4>
+  <form id="eventForm">
+    <div class="row">
+      <div class="col-md-3">
+        <input type="text" id="eventNama" class="form-control mb-2" placeholder="Nama Event">
+      </div>
+      <div class="col-md-3">
+        <select id="atletSelect" class="form-control mb-2"></select>
+      </div>
+      <div class="col-md-3">
+        <select id="medali" class="form-control mb-2">
+          <option value="">Pilih Medali</option>
+          <option value="emas">Emas</option>
+          <option value="perak">Perak</option>
+          <option value="perunggu">Perunggu</option>
+          <option value="none">Tidak Dapat Medali</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <button type="submit" class="btn btn-primary btn-block">Simpan Event</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+  </section>
+</div><script>
+  // Tambahan: isi dropdown atlet saat auth selesai
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      document.getElementById('loginModal').style.display = 'none';
+
+      db.ref('atlets').once('value', (snapshot) => {
+        const select = document.getElementById('atletSelect');
+        select.innerHTML = '<option value="">Pilih Atlet</option>';
+        snapshot.forEach(child => {
+          const val = child.val();
+          select.innerHTML += `<option value="${child.key}">${val.nama}</option>`;
+        });
+      });
+    }
+  });
+
+  // Tambahan: form event
+  document.getElementById('eventForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const eventNama = document.getElementById('eventNama').value;
+    const atletId = document.getElementById('atletSelect').value;
+    const medali = document.getElementById('medali').value;
+
+    if (!eventNama || !atletId || !medali) return alert('Lengkapi semua field!');
+
+    // Skema poin
+    let poinTambah = 0;
+    if (medali === 'emas') poinTambah = 5;
+    else if (medali === 'perak') poinTambah = 2;
+    else if (medali === 'perunggu') poinTambah = 1;
+    else poinTambah = -5;
+
+    const ref = db.ref('atlets/' + atletId);
+    ref.once('value').then(snapshot => {
+      const data = snapshot.val();
+      const newPoin = (data.poin || 0) + poinTambah;
+
+      ref.update({ poin: newPoin });
+
+      // Simpan riwayat event
+      db.ref('events').push({
+        atletId,
+        namaEvent: eventNama,
+        medali,
+        poin: poinTambah,
+        timestamp: Date.now()
+      });
+
+      document.getElementById('eventForm').reset();
+      alert('Event disimpan dan poin diperbarui.');
+    });
+  });
+</script>
