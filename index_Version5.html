@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Atlet Taekwondo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Data Atlet Taekwondo</h1>
+        <nav>
+            <ul>
+                <li><a href="#data">Data Atlet</a></li>
+                <li><a href="#event">Event</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="data">
+            <h2>Daftar Atlet</h2>
+            <table id="athlete-table">
+                <thead>
+                    <tr>
+                        <th>Nama</th>
+                        <th>Gender</th>
+                        <th>Asal Daerah</th>
+                        <th>Tahun Lahir</th>
+                        <th>Tingkat Sabuk</th>
+                        <th>Kelas</th>
+                        <th>Medali Grade B</th>
+                        <th>Poin Grade B</th>
+                        <th>Medali Grade A</th>
+                        <th>Poin Grade A</th>
+                        <th>Total Poin</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data akan diisi oleh JavaScript -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <!-- Modal untuk Profil Atlet -->
+    <div id="athlete-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <img id="athlete-photo" src="" alt="Foto Atlet">
+            <h3 id="athlete-name"></h3>
+            <p><strong>Event Kejuaraan:</strong> <span id="athlete-events"></span></p>
+            <p><strong>Poin Akhir:</strong> <span id="athlete-total-points"></span></p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Taekwondo Association</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
